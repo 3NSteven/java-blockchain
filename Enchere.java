@@ -1,17 +1,17 @@
-import java.io.IOException;
-import java.net.*;
-
 public class Enchere /*implements Runnable*/ {
 
+    private final String id;
     private final Vendeur vendeur;
     private final String nomProduit;
 
     private int tempsDepart;
     private int duree;
 
-    private double prixInitial;
+    private final double prixInitial;
 
     private Offre meilleureOffre;
+
+    private Bloc dernierBloc;
 
 
     /*
@@ -32,6 +32,8 @@ public class Enchere /*implements Runnable*/ {
         this.prixInitial = prixInitial;
         this.tempsDepart = tempsDepart;
         this.duree = duree;
+        this.id = Id.createID();
+        Market.addEnchere(this.id, this);
     }
 
     public Vendeur getVendeur(){
@@ -42,11 +44,24 @@ public class Enchere /*implements Runnable*/ {
         return nomProduit;
     }
 
+    public boolean hasOffre() {
+        if(meilleureOffre != null){
+            return true;
+        }
+        return false;
+    }
+
     public Offre getMeilleureOffre() {
         return meilleureOffre;
     }
 
     public void setMeilleureOffre(Offre meilleureOffre) {
+        if(this.meilleureOffre == null){   //s'il s'agit de la première offre effectuée par un acheteur
+            this.dernierBloc = new Bloc(meilleureOffre);
+        }
+        else{
+            this.dernierBloc = new Bloc(meilleureOffre, this.dernierBloc);
+        }
         this.meilleureOffre = meilleureOffre;
     }
 
@@ -54,19 +69,25 @@ public class Enchere /*implements Runnable*/ {
         return prixInitial;
     }
 
-    @Override
+    public String getId() {
+        return id;
+    }
+
     public String toString() {
-        if(meilleureOffre != null){ //si au moins une offre a été proposée par un acheteur
-            return "Enchere:\n" +
-                    "Produit mis en vente: " + nomProduit +
+        if(hasOffre()){ //si au moins une offre a été proposée par un acheteur
+            return "Enchère: " + id +
+                    "\nVendeur: " + vendeur.getId() +
+                    "\nProduit mis en vente: " + nomProduit +
                     "\nTemps de départ de l'enchère: " + tempsDepart + " minutes\n" +
                     "Temps restant: " + duree + " minutes\n" +
                     "Prix de départ: " + prixInitial + " euros\n" +
-                "Meilleure offre: " + meilleureOffre.getPrix() + " euros";
+                "Meilleure offre: " + meilleureOffre.getPrix() + " euros\n" +
+                    "Acheteur proposeur de l'offre: " + meilleureOffre.getAcheteur().getId();
         }
         else{   //si aucun acheteur n'a proposé d'offre pour le moment
-            return "Enchere:\n" +
-                    "Produit mis en vente: " + nomProduit +
+            return "Enchère: " + id +
+                    "\nVendeur: " + vendeur.getId() +
+                    "\nProduit mis en vente: " + nomProduit +
                     "\nTemps de départ de l'enchère: " + tempsDepart + " minutes\n" +
                     "Temps restant: " + duree + " minutes\n" +
                     "Prix de départ: " + prixInitial + " euros\n" +

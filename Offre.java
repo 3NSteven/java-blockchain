@@ -12,4 +12,8 @@ public class Offre {
     public double getPrix() {
         return prix;
     }
+
+    public Acheteur getAcheteur() {
+        return acheteur;
+    }
 }
