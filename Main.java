@@ -1,5 +1,11 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Locale;
 import java.util.Scanner;
+
+import static java.lang.Integer.parseInt;
 
 public class Main {
 
@@ -11,6 +17,32 @@ public class Main {
         System.out.println("Le vendeur...");
         Vendeur vendeur1 = new Vendeur();
         Enchere enchere1 = vendeur1.creerEnchere("Image", 100.50, 15, 360);
+
+
+        ServerSocket server = null;
+        Socket sock = null;
+        PrintWriter sockOut = null;
+        try {
+            server = new ServerSocket(7770);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        } /*finally {
+            try {
+                server.close();
+            } catch (IOException e2) {
+                System.err.println(e2.getMessage());
+            }
+        }*/
+        while(true){
+            try {
+                sock = server.accept();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+/*
+
         System.out.println(enchere1.getNomProduit());
         System.out.println(enchere1.getPrixInitial());
         if(enchere1.getMeilleureOffre() != null){   //si au moins une offre a été proposée pour cette enchère
@@ -33,6 +65,8 @@ public class Main {
         Enchere enchere2 = vendeur1.creerEnchere(nomProduit, prix, tempsDepart, duree);
 
         System.out.println(enchere2.toString());
+
+
         //ACHETEUR
         System.out.println("L'acheteur...");
 
@@ -67,6 +101,8 @@ public class Main {
             acheteur1.envoyerOffre(proposition);
         }
 
+
+        */
     }
 
 }

@@ -1,3 +1,10 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import static java.lang.Integer.parseInt;
+
 public class Enchere /*implements Runnable*/ {
 
     private final String id;
@@ -14,18 +21,21 @@ public class Enchere /*implements Runnable*/ {
     private Bloc dernierBloc;
 
 
+
     /*
+    ServerSocket server = null;
+    Socket sock = null;
+    PrintWriter sockOut = null;
+
     public void run(){
-        ServerSocket server = null;
-        Socket sock = null;
         try {
-            server = new ServerSocket(7770);
+            sock = server.accept();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    */
 
+     */
     public Enchere(Vendeur vendeur, String nomProduit, double prixInitial, int tempsDepart, int duree) {
         this.vendeur = vendeur;
         this.nomProduit = nomProduit;
@@ -34,6 +44,8 @@ public class Enchere /*implements Runnable*/ {
         this.duree = duree;
         this.id = Id.createID();
         Market.addEnchere(this.id, this);
+
+
     }
 
     public Vendeur getVendeur(){

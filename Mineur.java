@@ -1,2 +1,3 @@
-public class Mineur {
+public class Mineur extends Thread {
+    
 }

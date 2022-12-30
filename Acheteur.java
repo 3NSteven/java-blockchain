@@ -1,10 +1,40 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
+import static java.lang.Double.parseDouble;
+import static java.lang.System.exit;
+
 public class Acheteur {
 
-    private final String id;
+    private static String id;
 
-    private double fonds;
+    private static double fonds;
 
     private Enchere enchereSuivie;
+
+
+    private static Socket soc = null;
+    public static void main(String[] args){
+        if(args.length < 1){
+            System.err.println("Erreur: Vous devez indiquer le montant du porte-feuille de l'acheteur");
+            exit(1);
+        }
+        id = Id.createID();
+        fonds = parseDouble(args[0]);
+
+        try {
+            soc = new Socket("localhost", 7770);
+            BufferedReader buffReader = new BufferedReader(
+                    new InputStreamReader(soc.getInputStream()));
+        }
+        catch (IOException e) {}
+
+        System.out.println("Choix de l'enchère à rejoindre:");
+        System.out.println(Market.listerEncheres());
+
+    }
 
     public Acheteur(double fonds){
         this.id = Id.createID();
