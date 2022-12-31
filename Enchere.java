@@ -60,7 +60,7 @@ public class Enchere /*implements Runnable*/ {
             this.dernierBloc = new Bloc(meilleureOffre);
         }
         else{
-            this.dernierBloc = new Bloc(meilleureOffre, this.dernierBloc);
+            this.dernierBloc = new Bloc(meilleureOffre, this.dernierBloc.getHash());
         }
         this.meilleureOffre = meilleureOffre;
     }
